@@ -15,6 +15,7 @@ function problemParsing(tag, selector){
             code:'document.querySelector("' + tag + '").innerHTML'
         }, function(result){
             var problem = result[0];
+            problem = fixImagePaths(problem)
             problemComments[i] = removeTag(problem);
             i++;
 
@@ -25,6 +26,7 @@ function problemParsing(tag, selector){
             code:'document.querySelector("' + tag + '").innerHTML'
         }, function(result){
             var problem = result[0];
+            problem = fixImagePaths(problem)
 
             if(selector == null){
                 problemComments[i] = problem;
@@ -36,6 +38,11 @@ function problemParsing(tag, selector){
             }
         });
     }
+}
+
+function fixImagePaths(html) {
+    // '/JudgeOnline/upload/...' 부분을 'https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/upload/...'으로 변경
+    return html.replace(/src="\/JudgeOnline\/upload\/([^"]+)"/g, 'src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/upload/$1"');
 }
 
 function time(option){
